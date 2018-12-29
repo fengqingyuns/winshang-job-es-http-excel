@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.modules.job.dao.JokeInputDao">
+
+    <!-- <select id="" resultType="com.example.demo.modules.xiaohua.entity.Joke">
+        select
+            *
+        from t_joke
+        where loginacct = #{loginacct} and userpswd = #{userpswd} and type=#{type}
+    </select> -->
+	
+	<insert id="addJoke" parameterType="java.util.List">
+             insert into t_joke
+             (title, content, time)
+            values
+             <foreach collection ="list" item="joke" index= "index" separator =",">
+                 (
+                 #{joke.title}, #{joke.content},
+                #{joke.time}
+                 )
+             </foreach >
+	</insert>
+  
+
+</mapper>

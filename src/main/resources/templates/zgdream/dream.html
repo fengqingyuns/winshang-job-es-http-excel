@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keys" content="">
+    <meta name="author" content="">
+	<link rel="stylesheet" type="text/css" th:href="@{bootstrap/css/bootstrap.min.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{css/font-awesome.min.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{css/login.css}" >
+	 <script th:src="@{/jquery/jquery-2.1.1.min.js}" ></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}" ></script>
+     <script th:src="@{/script/layer/layer.js}" ></script>
+      	<!--引入弹窗组件end-->
+	<script type="text/javascript" th:src="@{/js/jquery.tips.js}" ></script>
+	<style>
+
+	</style>
+  </head>
+  <body>
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+        <div class="navbar-header">
+          <div><a class="navbar-brand" href="#" style="font-size:32px;">Wlcome-To-李涛解梦-App</a></div>
+        </div>
+      </div>
+    </nav><br><br>
+  
+  		<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12" >
+			<form class="form-search" style="margin-left: 500px">
+				<input id="queryText" class="input-medium search-query" type="text" />
+				
+				<!--  <button type="submit" id="queryBtn" class="btn">查找</button> -->
+				<a style="width:80px;height: 35px;margin-left: 40px" class="btn btn-lg btn-success btn-block" onclick="pageQuery()" >查找</a>
+			</form><br><br>
+			<div class="carousel slide" id="carousel-367287" style="background-color:#EF8530;width:70%;margin-left: 150px;padding: 0px 0px 0px 0px;">
+				<ol class="carousel-indicators" id="ol">
+					<!-- <li class="active" data-slide-to="0" data-target="#carousel-367287">
+					</li>
+					<li data-slide-to="1" data-target="#carousel-367287">
+					</li>
+					<li data-slide-to="2" data-target="#carousel-367287">
+					</li> -->
+				</ol>
+				<div class="carousel-inner" id="divdream" style="background-color: green">
+					
+					<div class="item active" >
+						<img src="/bootstrap/img/bangqiu.jpg" />
+						<div class="carousel-caption" style="">
+							<h4>
+							<font color="#FCFFFF">
+								周公解梦
+							</font>
+							</h4>
+							<p>
+							<font color="#FCFFFF">
+								周公是历史有名的解梦大师，他是神一般的存在周公是历史有名的解梦大师，他是神一般的存在周公是历史有名的解梦大师，他是神一般的存在周公是历史有名的解梦大师，他是神一般的存在周公是历史有名的解梦大师，他是神一般的存在
+							</font>
+							</p>
+						</div>
+						</div>
+					</div>
+		<a  data-slide="prev" href="#carousel-367287" class="left carousel-control"></a> <a data-slide="next" href="#carousel-367287" class="right carousel-control"></a>
+				</div> 
+			</div>
+		</div>
+	</div>
+<div>
+<ul id="attr_list_select_class_1" style="width:70px;"></ul>
+</div>
+
+   
+  </body>
+   <script >
+/*    $("#queryBtn").click(function() {
+   	var queryText = $("#queryText");
+
+   
+  // 	pageQuery();
+	/*var jsonData = {
+  			
+   	};
+	jsonData["dreamInfo"] = $("#queryText").val();
+   	$.ajax({
+   		url:"getDream",
+   		data:jsonData,
+   		success:function(rersult){
+   			alert(1);
+   		}
+   	})
+   
+  
+   }); */
+
+   function pageQuery() {
+		var queryText = $("#queryText");
+		var num = 0;
+		var con = "";
+		var jsonData = {
+	  			
+	   	};
+		if ( queryText.val() == "" ) {
+	   		layer.msg("请输入查询条件", {time:1000, icon:5, shift:6}, function(){
+	   			queryText.focus();
+	   		});
+	   		 return; 
+	   	}
+ 	jsonData["dreamInfo"] = $("#queryText").val();
+   	$.ajax({
+   		url:"getDream",
+   		data:jsonData,
+   		success:function(reresult){
+   			if ( reresult.success == true) {
+   				
+   				var dreamPage = reresult.data;
+   				var dataContent = "";
+   				$.each(dreamPage, function(i, dream){
+   					
+   					if(0 == i){
+   					dataContent = dataContent + '<div class="item active" >';
+   					dataContent = dataContent + '<img src="/bootstrap/img/bangqiu.jpg" />';
+   					dataContent = dataContent + '<div class="carousel-caption" >';
+   					dataContent = dataContent + '<h4>';
+   					dataContent = dataContent +'<font color="#FCFFFF">'+dream.title+'</font>';
+   					dataContent = dataContent +'</h4><p>';
+   					dataContent = dataContent +'<font color="#FCFFFF">'+dream.des+'</font>';
+   					dataContent = dataContent +'</p></div></div>';
+   					num++;
+   					}else{
+   						dataContent = dataContent + '<div class="item" >';
+   	   					dataContent = dataContent + '<img src="/bootstrap/img/bangqiu.jpg" />';
+   	   					dataContent = dataContent + '<div class="carousel-caption" >';
+   	   					dataContent = dataContent + '<h4>';
+   	   					dataContent = dataContent +'<font color="#FCFFFF">'+dream.title+'</font>';
+   	   					dataContent = dataContent +'</h4><p>';
+   	   					dataContent = dataContent +'<font color="#FCFFFF">'+dream.des+'</font>';
+   	   					dataContent = dataContent +'</p></div></div>';
+   	   					num++;
+   					}
+   				});
+   				
+   				for(var j=0;j<num;j++){
+   					if(j == 0){
+   						con = con+'<li class="active" data-slide-to="'+j+'" data-target="#carousel-367287"></li>'
+   					}else{
+   						con = con +'<li data-slide-to="'+j+'" data-target="#carousel-367287"></li>'
+   					}
+   				}
+   				$("#ol").html(con);
+   				$("#divdream").html(dataContent);
+   			} else {
+   	        	layer.msg(reresult.msg, {time:1000, icon:5, shift:6});
+   			} 
+   		}
+   	});
+   }
+  
+   /* 	$.ajax({
+   		url : "/getDream",
+   		data : jsonData,
+   		type:"GET",
+   		success:function(reresult) {
+   			alert(reresult);
+    			if ( reresult.success == true) {
+   				alert(11);
+   				var dreamPage = reresult.data;
+   				var dataContent = "";
+   				$.each(dreamPage, function(i, dream){
+   					alert(i);alert(dream.title);
+   					if(0 == i){
+   					dataContent = dataContent + '<div class="item active" >';
+   					dataContent = dataContent + '<img src="/bootstrap/img/bangqiu.jpg" />';
+   					dataContent = dataContent + '<div class="carousel-caption" >';
+   					dataContent = dataContent + '<h4>';
+   					dataContent = dataContent +'<font color="#FCFFFF">'+dream.title+'</font>';
+   					dataContent = dataContent +'</h4><p>';
+   					dataContent = dataContent +'<font color="#FCFFFF">'+dream.des+'</font>';
+   					dataContent = dataContent +'</p></div></div>';
+   					}else{
+   						dataContent = dataContent + '<div class="item" >';
+   	   					dataContent = dataContent + '<img src="/bootstrap/img/bangqiu.jpg" />';
+   	   					dataContent = dataContent + '<div class="carousel-caption" >';
+   	   					dataContent = dataContent + '<h4>';
+   	   					dataContent = dataContent +'<font color="#FCFFFF">'+dream.title+'</font>';
+   	   					dataContent = dataContent +'</h4><p>';
+   	   					dataContent = dataContent +'<font color="#FCFFFF">'+dream.des+'</font>';
+   	   					dataContent = dataContent +'</p></div></div>';
+   					}
+   				});
+   				$("#divdream").html(dataContent);
+   			} else {
+   	        	layer.msg("查询失败", {time:1000, icon:5, shift:6});
+   			} 
+   		},
+   		error:function(XMLHttpRequest, textStatus, errorThrown){
+   			alert(XMLHttpRequest.readyState);
+   		}
+   	});
+   }; */
+    </script>
+</html>

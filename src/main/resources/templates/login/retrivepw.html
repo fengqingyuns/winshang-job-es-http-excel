@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keys" content="">
+    <meta name="author" content="">
+	<link rel="stylesheet" type="text/css" th:href="@{bootstrap/css/bootstrap.min.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{css/font-awesome.min.css}" >
+	<link rel="stylesheet" type="text/css" th:href="@{css/login.css}" >
+	<style>
+
+	</style>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <div><a class="navbar-brand" href="index.html" style="font-size:32px;">欢迎来到周公解梦APP</a></div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <form class="form-signin" role="form">
+        <h2 class="form-signin-heading"><i class="glyphicon glyphicon-log-in"></i>找回密码</h2>
+		  <div id="checkdiv">
+		  <div class="form-group has-success has-feedback">
+			<input type="text" class="form-control" id="loginacct" placeholder="请输入账号" >
+			<span class="glyphicon glyphicon-user form-control-feedback" ></span>
+		  </div>
+		  <div class="form-group has-success has-feedback">
+			<input type="text" class="form-control" id="phone" placeholder="请输入手机号码" style="margin-top:10px;">
+			<span class="glyphicon glyphicon glyphicon-envelope form-control-feedback"></span>
+		  </div>
+		  </div>
+		  <div id="repws" style="display:none">
+		  <div class="form-group has-success has-feedback">
+			<input type="password" class="form-control"  id="newpw" placeholder="请输入密码" autofocus>
+			<span class="glyphicon glyphicon-user form-control-feedback" ></span>
+		  </div>
+		  <div class="form-group has-success has-feedback">
+			<input type="password" class="form-control"  id="copw" placeholder="再次输入密码" style="margin-top:10px;">
+			<span class="glyphicon glyphicon glyphicon-envelope form-control-feedback"></span>
+		  </div>
+        <a class="btn btn-lg btn-success btn-block" id="commit"  href="#" onclick="repw()" >提交</a>
+      	</div>
+      	</form>
+    </div>
+    <script type="text/javascript" th:src="@{/jquery/jquery-2.1.1.min.js}" ></script>
+    <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}" ></script>
+     <script type="text/javascript" th:src="@{/script/layer/layer.js}" ></script>
+      	<!--引入弹窗组件end-->
+	<script type="text/javascript" th:src="@{/js/jquery.tips.js}" ></script>
+    <script >
+    
+    var sText = $("#phone").val();
+//	var sname = $("#loginacct").val();
+	
+ 	//验证手机号
+	//onblur 为控件失去焦点事件 
+   document.getElementById('phone').onblur = function sValue(){
+    sText = this.value;
+   // var rphone =/^(?:[a-zA-Z0-9]+[_\-\+\.]?)*[a-zA-Z0-9]+@(?:([a-zA-Z0-9]+[_\-]?)*[a-zA-Z0-9]+\.)+([a-zA-Z]{2,})+$/;
+   var rePhone = /^1(3|4|5|7|8)\d{9}$/; 
+    var s=new RegExp(rePhone);
+
+    if(s.test(sText))
+   {   		
+    	if($("#loginacct").val() != ""){
+    		$.ajax({
+    			url:"checkUserAndPw",
+    			data:{
+    				loginacct:$("#loginacct").val(),
+    				phone:sText
+    			},
+    			success:function(result){
+    				if(result.success==false){
+               			layer.msg(result.msg, {time:1000, icon:5, shift:4});
+               			document.getElementById('loginacct').value="";
+               			$("#loginacct").focus();
+               		}else{
+               			layer.msg(result.msg, {time:1000, icon:4, shift:4});
+               			var repws=document.getElementById("repws");  
+               			var checkdiv=document.getElementById("checkdiv"); 
+               			checkdiv.setAttribute("style","display:none");
+               			repws.setAttribute("style","display");  
+               		}
+    			}
+    		})
+    	}
+   }
+    else//不正确清空
+   {
+    	$("#phone").tips({
+			side:3,
+            msg:'手机号格式不正确',
+            bg:'#AE81FF',
+            time:3
+        });
+    	
+    	document.getElementById('phone').value="";}
+   }
+    //验证用户名和手机号是否存在是否存在
+    
+   /*  document.getElementById('loginacct').onblur = function sValue(){
+
+   		$.ajax({
+   			url:"checkUser",
+   			data:"POST",
+   			data:{
+           	    loginacct:$("#loginacct").val()
+           	},
+           	success:function(result){
+           	
+           		if(result.success==false){
+           			layer.msg(result.msg, {time:1000, icon:5, shift:4});
+           			document.getElementById('loginacct').value="";
+           			$("#loginacct").focus();
+           		}else{
+           			 layer.msg(result.msg, {time:1000, icon:6, shift:4}); 
+           		}
+           	}
+   		});
+   } */
+    
+     function repw(){
+    	  // 判断页面元素是否输入
+        var loginacct = $("#loginacct");
+        var phone = $("#phone");
+        var newpw = $("#newpw");
+        var copw = $("#copw");
+     if ( newpw.val() == "" ) {
+            
+        	$("#newpw").tips({
+    			side:3,
+                msg:'密码不能为空',
+                bg:'#AE81FF',
+                time:3
+            });
+        	newpw.focus();
+        	return;
+        }
+        if ( copw.val() == "" ) {
+            
+        	$("#copw").tips({
+    			side:3,
+                msg:'密码不能为空',
+                bg:'#AE81FF',
+                time:3
+            });
+        	copw.focus();
+        	return;
+        }
+        if (newpw.val()  != copw.val() ) {
+        
+        	$("#copw").tips({
+    			side:3,
+                msg:'两次密码不一致',
+                bg:'#AE81FF',
+                time:3
+            });
+        	loginacct.focus();
+        	return;
+        }
+   
+        
+        $.ajax({
+   			url:"updatePw",
+   			data:"POST",
+   			data:{
+           	    loginacct:$("#loginacct").val(),
+           	 	userpswd:$("#copw").val(),
+           	    phone:$("#phone").val(),
+           	  
+           	},
+           	success:function(result){
+           	
+           		if(result.success==false){
+           		 layer.msg(result.msg, {time:1000, icon:2, shift:4},function(){
+           			window.location.href = "/reg";
+           		 }); 
+           			
+           		}else{
+           			layer.msg(result.msg, {time:1000, icon:1, shift:6}, function(){
+           				window.location.href = "/tologin";
+                	});
+           			
+           			
+           		}
+           	}
+   		});
+    } 
+  
+    </script>
+  </body>
+</html>
